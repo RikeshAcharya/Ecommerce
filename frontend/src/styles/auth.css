@@ -1,0 +1,67 @@
+/* src/styles/auth.css */
+
+/* (Keep previous styles, then add these new rules) */
+
+/* Register-specific – wider container for multi-column */
+.register-container {
+  max-width: 600px;
+}
+
+/* Form row for two columns */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-row .form-group {
+  flex: 1 1 45%;
+  min-width: 160px;
+}
+
+/* Select styling */
+.auth-container select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f8f9fa;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  appearance: auto;
+}
+
+.auth-container select:focus {
+  border-color: #6c63ff;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+}
+
+/* Success message */
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 1.25rem;
+  border: 1px solid #c3e6cb;
+  font-size: 0.9rem;
+}
+
+/* Auth switch link (Login/Register) */
+.auth-switch {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: #6c757d;
+}
+
+.auth-switch a {
+  color: #6c63ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}

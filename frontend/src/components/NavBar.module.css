@@ -1,0 +1,101 @@
+/* NavBar.module.css */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #6c63ff;
+}
+
+.navbar .logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.navbar .logo span {
+  color: #6c63ff;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLinks li {
+  margin: 0;
+}
+
+.navLinks a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: all 0.25s ease;
+}
+
+.navLinks a:hover {
+  color: #ffffff;
+  background: rgba(108, 99, 255, 0.2);
+}
+
+.navLinks a.active {
+  color: #ffffff;
+  background: #6c63ff;
+}
+
+/* Logout button inside navbar */
+.logoutBtn {
+  background: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.logoutBtn:hover {
+  background: #e55a5a;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.8rem 1rem;
+  }
+
+  .navbar .logo {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .navLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .navLinks a {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .logoutBtn {
+    padding: 0.3rem 1rem;
+    font-size: 0.9rem;
+  }
+}

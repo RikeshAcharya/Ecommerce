@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Inkwell &mdash; Vintage Stationery</title>
+
+  <!-- Google Fonts: Playfair Display (headings) + Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,500&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* =========================================================
+       1. DESIGN TOKENS
+       Centralised colour palette and reusable shadow/paper vars.
+       ========================================================= */
+    :root {
+      --parchment: #F9F6F0;   /* aged paper background */
+      --ink: #2E3A3B;         /* primary text */
+      --leather: #D4A373;     /* gold / leather accent */
+      --sage: #A3B18A;        /* dried sage accent */
+      --ink-soft: rgba(46, 58, 59, 0.72);
+
+      /* Layered, soft shadows that mimic stacked sheets of paper */
+      --paper-shadow:
+        0 1px 0 rgba(46, 58, 59, 0.04),
+        0 4px 10px rgba(46, 58, 59, 0.06),
+        0 14px 30px rgba(46, 58, 59, 0.08);
+      --paper-shadow-lift:
+        0 2px 0 rgba(46, 58, 59, 0.05),
+        0 10px 20px rgba(46, 58, 59, 0.10),
+        0 26px 50px rgba(46, 58, 59, 0.14);
+
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', system-ui, sans-serif;
+      --script: 'Dancing Script', cursive;
+    }
+
+    /* =========================================================
+       2. RESET & BASE
+       ========================================================= */
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background-color: var(--parchment);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ---- Paper grain / noise overlay (pure SVG, no images) ----
+       A fixed, full-viewport pseudo-element tinted with a fractal
+       noise filter gives the rough-paper texture across the page. */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none; /* never blocks interaction */
+      opacity: 0.05;
+      background-image: url("data:image/svg+xml;utf8,\
+        <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>\
+          <filter id='n'>\
+            <feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/>\
+          </filter>\
+          <rect width='100%' height='100%' filter='url(%23n)'/>\
+        </svg>");
+      background-repeat: repeat;
+    }
+
+    /* A warm vignette to deepen the parchment at the edges */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(120% 120% at 50% 0%, rgba(212, 163, 115, 0.10), transparent 55%),
+        radial-gradient(120% 120% at 50% 100%, rgba(163, 177, 138, 0.12), transparent 55%);
+    }
+
+    h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.15; }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1120px, 90vw);
+      margin-inline: auto;
+    }
+
+    /* =========================================================
+       3. HEADER  (logo + nav with decorative double border)
+       ========================================================= */
+    .site-header {
+      padding: 22px 0 14px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(var(--parchment), rgba(249, 246, 240, 0.85));
+      backdrop-filter: blur(4px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo .mark {
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border: 1.5px solid var(--leather);
+      border-radius: 50%;
+      color: var(--leather);
+      font-size: 1.1rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: 28px;
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+    }
+    .nav a { position: relative; padding: 4px 0; transition: color 0.25s; }
+    .nav a::after {
+      content: "";
+      position: absolute; left: 0; bottom: -2px;
+      width: 0; height: 1.5px;
+      background: var(--leather);
+      transition: width 0.3s ease;
+    }
+    .nav a:hover { color: var(--leather); }
+    .nav a:hover::after { width: 100%; }
+
+    /* Decorative double-border line under the header */
+    .header-rule {
+      margin-top: 14px;
+      border: 0;
+      border-top: 1.5px solid var(--ink);
+      border-bottom: 1.5px solid var(--ink);
+      height: 4px; /* the gap between the two lines */
+      opacity: 0.85;
+    }
+
+    /* =========================================================
+       4. HERO  (large hand-drawn style quote)
+       ========================================================= */
+    .hero {
+      padding: clamp(60px, 12vw, 140px) 0 clamp(50px, 9vw, 110px);
+      text-align: center;
+    }
+    .hero .eyebrow {
+      font-family: var(--sans);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.78rem;
+      color: var(--leather);
+      margin-bottom: 26px;
+    }
+    .hero blockquote {
+      margin: 0 auto;
+      max-width: 880px;
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(1.9rem, 5.2vw, 3.6rem);
+      line-height: 1.2;
+      position: relative;
+    }
+    /* Hand-drawn quotation marks using SVG-ish pseudo glyphs */
+    .hero blockquote::before,
+    .hero blockquote::after {
+      color: var(--sage);
+      font-size: 1.5em;
+      line-height: 0;
+      vertical-align: -0.35em;
+    }
+    .hero blockquote::before { content: "\201C"; margin-right: 0.08em; }
+    .hero blockquote::after  { content: "\201D"; margin-left: 0.08em; }
+
+    .hero p.sub {
+      max-width: 560px;
+      margin: 30px auto 0;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+    }
+    .hero .actions {
+      margin-top: 40px;
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      padding: 13px 28px;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 1.5px solid var(--ink);
+      transition: transform 0.2s ease, background 0.25s, color 0.25s, box-shadow 0.25s;
+    }
+    .btn-primary { background: var(--ink); color: var(--parchment); }
+    .btn-primary:hover { background: var(--leather); border-color: var(--leather); transform: translateY(-2px); }
+    .btn-ghost { background: transparent; color: var(--ink); }
+    .btn-ghost:hover { background: var(--sage); border-color: var(--sage); color: var(--parchment); transform: translateY(-2px); }
+
+    /* =========================================================
+       5. FEATURES GRID  (cards styled as open envelopes)
+       ========================================================= */
+    .features { padding: clamp(30px, 6vw, 70px) 0 clamp(60px, 10vw, 120px); }
+    .section-head { text-align: center; margin-bottom: 54px; }
+    .section-head h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); }
+    .section-head p { color: var(--ink-soft); max-width: 520px; margin: 14px auto 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 38px;
+    }
+
+    /* Each card simulates an open envelope:
+       - the base sheet holds the content
+       - ::before is the folded envelope flap (rotated pseudo-element)
+       - ::after adds the gummed triangle accent */
+    .card {
+      position: relative;
+      background: #fffdf8;
+      border: 1px solid rgba(46, 58, 59, 0.14);
+      border-radius: 4px;
+      padding: 38px 30px 34px;
+      box-shadow: var(--paper-shadow);
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(.2,.7,.3,1), box-shadow 0.3s ease;
+    }
+
+    /* Envelope flap (top-folded triangle, rotated for an "open" look) */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -2px; left: 50%;
+      width: 78%; height: 56px;
+      transform: translateX(-50%) rotate(-1.2deg);
+      background: linear-gradient(var(--leather), #c79163);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      opacity: 0.92;
+      box-shadow: 0 4px 8px rgba(46, 58, 59, 0.12);
+    }
+    /* A thin sage inner liner peeking from the flap */
+    .card::after {
+      content: "";
+      position: absolute;
+      top: 30px; left: 50%;
+      width: 60%; height: 30px;
+      transform: translateX(-50%) rotate(0.6deg);
+      background: var(--sage);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      opacity: 0.35;
+    }
+
+    .card .icon {
+      position: relative;
+      z-index: 2;
+      width: 52px; height: 52px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: var(--parchment);
+      border: 1.5px solid var(--sage);
+      color: var(--leather);
+      font-size: 1.4rem;
+      margin-bottom: 22px;
+    }
+    .card h3 {
+      position: relative; z-index: 2;
+      margin: 0 0 10px;
+      font-size: 1.3rem;
+    }
+    .card p {
+      position: relative; z-index: 2;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.96rem;
+    }
+
+    /* Hover lift */
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--paper-shadow-lift);
+    }
+
+    /* =========================================================
+       6. FOOTER  (signature line in a cursive font)
+       ========================================================= */
+    .site-footer {
+      background: var(--ink);
+      color: var(--parchment);
+      padding: 56px 0 40px;
+      margin-top: 40px;
+    }
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .footer-grid .brand { font-family: var(--serif); font-size: 1.4rem; }
+    .footer-grid .links { display: flex; gap: 22px; flex-wrap: wrap; font-size: 0.9rem; opacity: 0.85; }
+    .footer-grid .links a:hover { color: var(--leather); }
+
+    .signature {
+      font-family: var(--script);
+      font-size: 2.1rem;
+      color: var(--leather);
+      margin-top: 8px;
+    }
+    .site-footer .fine {
+      margin-top: 26px;
+      font-size: 0.8rem;
+      opacity: 0.65;
+      text-align: center;
+    }
+
+    /* =========================================================
+       7. SCROLL FADE-IN ANIMATION
+       Elements with .reveal start hidden and slide up when
+       the IntersectionObserver adds the .is-visible class.
+       ========================================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.7,.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Slight stagger for grouped children */
+    .reveal.d1 { transition-delay: 0.08s; }
+    .reveal.d2 { transition-delay: 0.16s; }
+    .reveal.d3 { transition-delay: 0.24s; }
+
+    /* =========================================================
+       8. RESPONSIVE TWEAKS
+       ========================================================= */
+    @media (max-width: 640px) {
+      .nav { gap: 18px; font-size: 0.88rem; }
+      .footer-grid { flex-direction: column; align-items: flex-start; }
+      .header-inner { justify-content: center; text-align: center; }
+    }
+
+    /* Respect users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="mark">✒</span>
+        The Inkwell
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="#shop">Shop</a>
+        <a href="#story">Our Story</a>
+        <a href="#features">Collection</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+    <!-- Decorative double-border rule -->
+    <div class="container">
+      <hr class="header-rule" />
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <main>
+    <section class="hero" id="shop">
+      <div class="container reveal">
+        <p class="eyebrow">Est. 1924 &middot; Letterpress &amp; Paper Goods</p>
+        <blockquote>
+          The pen is the tongue of the mind &mdash; let it write upon paper worth keeping.
+        </blockquote>
+        <p class="sub">
+          Hand-bound notebooks, deckled correspondence cards, and wax-sealed
+          envelopes, crafted for those who still believe a letter is a keepsake.
+        </p>
+        <div class="actions">
+          <button class="btn btn-primary">Browse the Collection</button>
+          <button class="btn btn-ghost">Read Our Story</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FEATURES ===================== -->
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Correspondence, Reimagined</h2>
+          <p>Every piece is pressed on cotton-rag paper and finished by hand in our riverside bindery.</p>
+        </div>
+
+        <div class="grid">
+          <!-- Card 1 -->
+          <article class="card reveal d1">
+            <div class="icon">✉</div>
+            <h3>Wax-Sealed Envelopes</h3>
+            <p>
+              Heavyweight envelopes with a hand-poured sealing wax stamp &mdash;
+              because some words deserve a proper farewell.
+            </p>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card reveal d2">
+            <div class="icon">✒</div>
+            <h3>Letterpress Cards</h3>
+            <p>
+              Deeply debossed motifs pulled on a 1950s press, each impression
+              catching the light like engraved memory.
+            </p>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="card reveal d3">
+            <div class="icon">❧</div>
+            <h3>Bound Journals</h3>
+            <p>
+              Thread-stitched notebooks wrapped in vegetable-tanned leather that
+              softens and ages beautifully with use.
+            </p>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="card reveal d1">
+            <div class="icon">✦</div>
+            <h3>Fountain Inks</h3>
+            <p>
+              Small-batch inks in sepia, sage, and oxblood &mdash; formulated
+              to flow smooth and dry without feathering.
+            </p>
+          </article>
+
+          <!-- Card 5 -->
+          <article class="card reveal d2">
+            <div class="icon">✂</div>
+            <h3>Deckle Edges</h3>
+            <p>
+              Torn, feathered page edges give every sheet the unmistakable
+              tactility of handmade paper.
+            </p>
+          </article>
+
+          <!-- Card 6 -->
+          <article class="card reveal d3">
+            <div class="icon">♡</div>
+            <h3>Gift Concierge</h3>
+            <p>
+              Tell us the occasion and we will curate, wrap, and post a parcel
+              tied with linen ribbon and a handwritten note.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer" id="contact">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand">The Inkwell</div>
+        <p style="opacity:0.8; max-width:340px; margin:10px 0 0;">
+          Riverside Bindery, No. 12 Quill Lane. Correspondence welcomed daily.
+        </p>
+        <div class="signature">Eleanor Vance</div>
+        <p style="font-size:0.82rem; opacity:0.7; margin:0;">Founder &amp; Master Binder</p>
+      </div>
+      <nav class="links" aria-label="Footer">
+        <a href="#shop">Shop</a>
+        <a href="#story">Story</a>
+        <a href="#features">Collection</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+    <p class="fine">&copy; 1924&ndash;2026 The Inkwell. All correspondence reserved.</p>
+  </footer>
+
+  <!-- ===================== JAVASCRIPT ===================== -->
+  <script>
+    /* -----------------------------------------------------------
+       Scroll-reveal: observe every .reveal element and toggle
+       the .is-visible class once it enters the viewport.
+       ----------------------------------------------------------- */
+    (function () {
+      var revealEls = document.querySelectorAll('.reveal');
+
+      // Graceful fallback if IntersectionObserver is unavailable
+      if (!('IntersectionObserver' in window)) {
+        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+        return;
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries, obs) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target); // reveal only once
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      revealEls.forEach(function (el) { observer.observe(el); });
+    })();
+  </script>
+</body>
+</html>

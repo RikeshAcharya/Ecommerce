@@ -1,0 +1,8 @@
+Django>=4.2,<5.0
+djangorestframework>=3.14.0
+django-cors-headers>=4.0.0
+django-filter>=23.0
+djangorestframework-simplejwt>=5.2.0
+python-decouple>=3.8
+cloudinary>=1.33.0
+django-cloudinary-storage>=0.3.0

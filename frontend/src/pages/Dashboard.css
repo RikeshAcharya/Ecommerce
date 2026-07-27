@@ -1,0 +1,266 @@
+/* Dashboard.css - Complete Stationery / Vintage Paper Theme */
+
+/* --- Import Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* --- 1. Scoped Wrapper (Everything lives inside this class) --- */
+.dashboard-stationery {
+  /* CSS Variables (Colors) */
+  --color-paper: #f9f6f0;
+  --color-ink: #2e3a3b;
+  --color-gold: #d4a373;
+  --color-sage: #a3b18a;
+  --color-ash: #e8e0d5;
+  --color-parchment-bg: #ece6db;
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--color-ink);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  margin: 0;
+  background-color: var(--color-parchment-bg);
+  box-sizing: border-box;
+}
+
+/* --- 2. The Main Paper Card (Stacked sheets effect) --- */
+.dashboard-stationery .card {
+  max-width: 880px;
+  width: 100%;
+  padding: 48px 56px;
+  background-color: var(--color-paper);
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+  
+  /* Stacked paper shadows */
+  box-shadow: 
+    0 1px 1px rgba(0,0,0,0.03),
+    0 4px 8px rgba(0,0,0,0.05),
+    0 12px 24px rgba(0,0,0,0.08),
+    0 0 0 1px #f0ebe2 inset,
+    0 0 0 2px #e5ddd1 inset;
+}
+
+/* --- 3. Paper Grain Texture (SVG noise overlay via pseudo-element) --- */
+.dashboard-stationery .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* --- 4. Typography --- */
+.dashboard-stationery h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  letter-spacing: -0.5px;
+  color: var(--color-ink);
+  margin: 0 0 4px 0;
+}
+
+.dashboard-stationery h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--color-gold);
+  padding-bottom: 10px;
+  margin-top: 32px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+/* --- 5. Header / User Greeting --- */
+.dashboard-stationery .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 2px dashed var(--color-ash);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2; /* Ensures text is above the grain overlay */
+}
+
+.dashboard-stationery .user-greeting p {
+  margin: 6px 0 0 0;
+  font-size: 0.95rem;
+  color: #5a5f5f;
+  font-weight: 300;
+}
+
+/* --- 6. Badges (User Type / B2B-B2C) --- */
+.dashboard-stationery .badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.dashboard-stationery .badge {
+  display: inline-block;
+  padding: 4px 14px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-radius: 20px;
+  background-color: var(--color-ash);
+  color: #4a4f4f;
+  border: 1px solid #d6cdbf;
+}
+
+.dashboard-stationery .badge.b2b {
+  background-color: var(--color-gold);
+  color: #3d2c1b;
+  border-color: #c28f5c;
+}
+
+.dashboard-stationery .badge.b2c {
+  background-color: var(--color-sage);
+  color: #263522;
+  border-color: #889b72;
+}
+
+/* --- 7. Logout Actions --- */
+.dashboard-stationery .logout-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* The Link styled as an elegant ghost button */
+.dashboard-stationery .logout-link {
+  font-size: 0.9rem;
+  color: var(--color-ink);
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--color-gold);
+  transition: all 0.2s ease;
+}
+
+.dashboard-stationery .logout-link:hover {
+  color: #b3885a;
+  border-bottom: 1px solid var(--color-ink);
+}
+
+/* The Direct Logout Button */
+.dashboard-stationery .btn-logout {
+  background: transparent;
+  border: 1px solid var(--color-ink);
+  color: var(--color-ink);
+  padding: 8px 24px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.dashboard-stationery .btn-logout:hover {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  box-shadow: 4px 4px 0 var(--color-gold);
+  transform: translate(-2px, -2px);
+}
+
+/* --- 8. Product & Order Lists (Ledger / Receipt style) --- */
+.dashboard-stationery ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-stationery li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 8px;
+  border-bottom: 1px dashed var(--color-ash);
+  transition: background 0.15s ease;
+}
+
+.dashboard-stationery li:last-child {
+  border-bottom: none;
+}
+
+.dashboard-stationery li:hover {
+  background-color: rgba(212, 163, 115, 0.06);
+}
+
+/* Styling the product name links */
+.dashboard-stationery li a {
+  color: var(--color-ink);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px dotted transparent;
+  transition: border-color 0.2s;
+  font-size: 1rem;
+}
+
+.dashboard-stationery li a:hover {
+  border-bottom-color: var(--color-gold);
+}
+
+/* Price & Stock (monospace for a typewriter feel) */
+.dashboard-stationery .list-meta {
+  font-family: 'Inter', monospace;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #5a6060;
+  background: #f2ede6;
+  padding: 2px 12px;
+  border-radius: 12px;
+  border: 1px solid #e3dbd0;
+}
+
+/* Order status badge */
+.dashboard-stationery .order-status {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--color-ash);
+  padding: 2px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: #4a4f4f;
+}
+
+.dashboard-stationery .order-amount {
+  font-family: 'Inter', monospace;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+/* --- 9. Loading State (Typewriter pulse) --- */
+.dashboard-stationery .loading-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--color-gold);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
