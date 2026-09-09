@@ -1,101 +1,381 @@
-/* NavBar.module.css */
+/* ─── Navbar wrapper ─── */
 .navbar {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.navTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.logo span {
+  color: #2563eb;
+}
+
+/* ─── Search Form (centered) ─── */
+.searchForm {
+  flex: 1;
+  max-width: 500px;
+  min-width: 200px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.8rem 2rem;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  border-bottom: 3px solid #6c63ff;
+  background: #f1f5f9;
+  border-radius: 30px;
+  padding: 0.3rem 0.3rem 0.3rem 1rem;
+  border: 1px solid transparent;
+  transition: border-color 0.2s, background 0.2s;
+  margin: 0 1rem;
 }
 
-.navbar .logo {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #ffffff;
-  text-decoration: none;
-  letter-spacing: -0.5px;
+.searchForm:focus-within {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.navbar .logo span {
-  color: #6c63ff;
+.searchInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  outline: none;
+  color: #0f172a;
 }
 
+.searchInput::placeholder {
+  color: #94a3b8;
+}
+
+.searchButton {
+  background: #2563eb;
+  border: none;
+  border-radius: 30px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fff;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.searchButton:hover {
+  background: #1d4ed8;
+}
+
+/* ─── Nav links ─── */
 .navLinks {
+  list-style: none;
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  list-style: none;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
 }
 
-.navLinks li {
-  margin: 0;
-}
-
-.navLinks a {
-  color: rgba(255, 255, 255, 0.8);
+.navLinks a,
+.navLinks button {
+  color: #334155;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  transition: all 0.25s ease;
-}
-
-.navLinks a:hover {
-  color: #ffffff;
-  background: rgba(108, 99, 255, 0.2);
-}
-
-.navLinks a.active {
-  color: #ffffff;
-  background: #6c63ff;
-}
-
-/* Logout button inside navbar */
-.logoutBtn {
-  background: #ff6b6b;
-  color: #fff;
+  transition: color 0.15s ease;
+  background: none;
   border: none;
-  padding: 0.4rem 1.2rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+.navLinks a:hover,
+.navLinks button:hover {
+  color: #2563eb;
+}
+
+/* ─── Dropdown (user menu) ─── */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdownToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  color: #334155;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 6px;
+  transition: background 0.15s ease;
+}
+.dropdownToggle:hover {
+  background: #f1f5f9;
+}
+.dropdownToggle:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.dropdownMenu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  padding: 0.4rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 100;
+}
+.dropdownOpen .dropdownMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdownMenu a,
+.dropdownMenu button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1.25rem;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #1e293b;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+.dropdownMenu a:hover,
+.dropdownMenu button:hover {
+  background: #f1f5f9;
+}
+.dropdownMenu hr {
+  margin: 0.25rem 0;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+.dropdownMenu button:last-child {
+  color: #dc2626;
+}
+.dropdownMenu button:last-child:hover {
+  background: #fee2e2;
+}
+
+/* ─── Category Bar (below the main nav) ─── */
+.categoryBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  padding: 0.5rem 2rem;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  flex-wrap: nowrap;
+}
+
+.categoryBar::-webkit-scrollbar {
+  height: 4px;
+}
+.categoryBar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.categoryLink {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1e293b;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.categoryLink:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* ─── Admin Navbar ─── */
+.adminNavbar {
+  background: #1e293b;
+  color: #f1f5f9;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid #334155;
+}
+
+.adminNavbar .logo {
+  color: #f1f5f9;
+}
+.adminNavbar .logo span {
+  color: #60a5fa;
+}
+
+.adminNavbar .navLinks a,
+.adminNavbar .navLinks button {
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
   font-weight: 500;
   font-size: 0.95rem;
+}
+.adminNavbar .navLinks a:hover,
+.adminNavbar .navLinks button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+}
+
+.adminNavbar .navLinks a.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.adminNavbar .logoutBtn {
+  background: none;
+  border: none;
   cursor: pointer;
-  transition: background 0.2s;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.adminNavbar .logoutBtn:hover {
+  background: rgba(220, 38, 38, 0.2);
+  color: #fca5a5;
 }
 
-.logoutBtn:hover {
-  background: #e55a5a;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .navbar {
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .navTop {
     flex-direction: column;
     align-items: stretch;
-    padding: 0.8rem 1rem;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
   }
-
-  .navbar .logo {
-    text-align: center;
-    margin-bottom: 0.5rem;
+  .searchForm {
+    margin: 0;
+    max-width: 100%;
   }
-
   .navLinks {
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 0.8rem;
+    gap: 0.75rem;
   }
+  .categoryBar {
+    padding: 0.5rem 1rem;
+    gap: 0.5rem 1rem;
+  }
+  .categoryLink {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
+  .adminNavbar {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+  .adminNavbar .navLinks {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .adminNavbar .navLinks a,
+  .adminNavbar .navLinks button {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.85rem;
+  }
+}
 
-  .navLinks a {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.9rem;
+@media (max-width: 480px) {
+  .navLinks {
+    gap: 0.5rem;
   }
+  .navLinks a,
+  .navLinks button {
+    font-size: 0.8rem;
+  }
+  .categoryLink {
+    font-size: 0.7rem;
+  }
+}
 
-  .logoutBtn {
-    padding: 0.3rem 1rem;
-    font-size: 0.9rem;
-  }
+/* ─── Categories Dropdown (hover) ─── */
+.dropdownItem {
+  display: block;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+  color: #1e293b;
+  text-decoration: none;
+  transition: background 0.1s ease;
+}
+
+.dropdownItem:hover {
+  background: #f1f5f9;
+}
+
+.themeToggle {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.themeToggle:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Ensure the dropdown stays open on hover */
+.dropdown:hover .dropdownMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Override the click dropdown to also work with hover */
+.dropdown .dropdownMenu {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dropdownOpen .dropdownMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }

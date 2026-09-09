@@ -1,208 +1,191 @@
-import React, { useEffect, useState } from 'react';
-import api from '../api/axios';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import styles from './AdminDashboard.module.css';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-interface Product {
-  id: number;
-  name: string;
-  sku: string;
-  retail_price: number;
-  wholesale_price: number;
-  stock: number;
-  description: string;
-  category: number;
-  is_active: boolean;
-  images: { image: string; is_primary: boolean }[];
-}
-
-const AdminDashboard: React.FC = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [formData, setFormData] = useState<Partial<Product>>({});
-  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
-
-  // Redirect if not staff
-  useEffect(() => {
-    if (user && !user.is_staff) {
-      navigate('/');
-    }
-  }, [user, navigate]);
-
-  // Fetch products and categories
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [productsRes, categoriesRes] = await Promise.all([
-          api.get('products/'),
-          api.get('categories/'),
-        ]);
-        setProducts(productsRes.data.results || productsRes.data);
-        setCategories(categoriesRes.data.results || categoriesRes.data);
-      } catch (err) {
-        console.error('Failed to fetch data', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  // Delete product
-  const handleDelete = async (id: number) => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
-    try {
-      await api.delete(`products/${id}/`);
-      setProducts(products.filter(p => p.id !== id));
-    } catch (err) {
-      console.error('Delete failed', err);
-    }
+export const AdminDashboard: React.FC = () => {
+  const styles = {
+    container: {
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '2rem 1.5rem',
+    },
+    heading: {
+      fontSize: '2rem',
+      fontWeight: '700',
+      marginBottom: '0.5rem',
+    },
+    subheading: {
+      color: '#64748b',
+      marginBottom: '2rem',
+    },
+    grid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+      gap: '1.5rem',
+    },
+    card: {
+      background: '#fff',
+      borderRadius: '12px',
+      padding: '1.5rem',
+      border: '1px solid #e2e8f0',
+      boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+      transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+      textDecoration: 'none',
+      color: '#0f172a',
+      display: 'block',
+    },
+    cardHover: {
+      transform: 'translateY(-4px)',
+      boxShadow: '0 10px 15px -3px rgba(0,0,0,0.08)',
+    },
+    icon: {
+      fontSize: '2rem',
+      marginBottom: '0.5rem',
+    },
+    cardTitle: {
+      fontSize: '1.125rem',
+      fontWeight: '600',
+      marginBottom: '0.25rem',
+    },
+    cardDescription: {
+      fontSize: '0.9rem',
+      color: '#64748b',
+    },
+    badge: {
+      display: 'inline-block',
+      fontSize: '0.7rem',
+      fontWeight: '600',
+      padding: '0.15rem 0.5rem',
+      borderRadius: '9999px',
+      background: '#dbeafe',
+      color: '#1e40af',
+      marginTop: '0.5rem',
+    },
+    externalLink: {
+      fontSize: '0.8rem',
+      color: '#2563eb',
+      marginTop: '0.5rem',
+      display: 'inline-block',
+    },
   };
-
-  // Open edit modal
-  const handleEdit = (product: Product) => {
-    setEditingProduct(product);
-    setFormData(product);
-  };
-
-  // Close modal
-  const handleCloseModal = () => {
-    setEditingProduct(null);
-    setFormData({});
-  };
-
-  // Handle form changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'number' ? parseFloat(value) : value,
-    }));
-  };
-
-  // Submit create/update
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (editingProduct) {
-        // Update
-        const { data } = await api.put(`products/${editingProduct.id}/`, formData);
-        setProducts(products.map(p => (p.id === data.id ? data : p)));
-      } else {
-        // Create
-        const { data } = await api.post('products/', formData);
-        setProducts([data, ...products]);
-      }
-      handleCloseModal();
-    } catch (err) {
-      console.error('Save failed', err);
-    }
-  };
-
-  if (loading) return <div className={styles.loading}>Loading...</div>;
 
   return (
-    <div className={styles.container}>
-      <h1>Admin Dashboard – Products</h1>
-      <button className={styles.createBtn} onClick={() => setEditingProduct({} as Product)}>
-        + Add Product
-      </button>
+    <div style={styles.container}>
+      <h1 style={styles.heading}>Admin Dashboard</h1>
+      <p style={styles.subheading}>Manage your store – products, categories, orders, users, and more.</p>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>SKU</th>
-            <th>Retail Price</th>
-            <th>Wholesale Price</th>
-            <th>Stock</th>
-            <th>Active</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map(product => (
-            <tr key={product.id}>
-              <td>{product.id}</td>
-              <td>{product.name}</td>
-              <td>{product.sku}</td>
-              <td>${product.retail_price}</td>
-              <td>${product.wholesale_price}</td>
-              <td>{product.stock}</td>
-              <td>{product.is_active ? '✅' : '❌'}</td>
-              <td>
-                <button className={styles.editBtn} onClick={() => handleEdit(product)}>Edit</button>
-                <button className={styles.deleteBtn} onClick={() => handleDelete(product.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div style={styles.grid}>
+        {/* ---- Categories (built) ---- */}
+        <Link
+          to="/admin/categories"
+          style={styles.card}
+          onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
+          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' })}
+        >
+          <div style={styles.icon}>📂</div>
+          <div style={styles.cardTitle}>Categories</div>
+          <div style={styles.cardDescription}>Create, edit, and delete product categories.</div>
+          <span style={styles.badge}>Ready</span>
+        </Link>
 
-      {/* Modal for create/edit */}
-      {editingProduct !== null && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <h2>{editingProduct.id ? 'Edit Product' : 'Create Product'}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
-                <label>Name *</label>
-                <input name="name" value={formData.name || ''} onChange={handleChange} required />
-              </div>
-              <div className={styles.formGroup}>
-                <label>SKU *</label>
-                <input name="sku" value={formData.sku || ''} onChange={handleChange} required />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Description</label>
-                <textarea name="description" value={formData.description || ''} onChange={handleChange} />
-              </div>
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label>Retail Price *</label>
-                  <input type="number" step="0.01" name="retail_price" value={formData.retail_price || ''} onChange={handleChange} required />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Wholesale Price</label>
-                  <input type="number" step="0.01" name="wholesale_price" value={formData.wholesale_price || ''} onChange={handleChange} />
-                </div>
-              </div>
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label>Stock</label>
-                  <input type="number" name="stock" value={formData.stock || 0} onChange={handleChange} />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Category</label>
-                  <select name="category" value={formData.category || ''} onChange={handleChange}>
-                    <option value="">Select category</option>
-                    {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className={styles.formGroup}>
-                <label>
-                  <input type="checkbox" name="is_active" checked={formData.is_active || false} onChange={(e) => setFormData({...formData, is_active: e.target.checked})} />
-                  Active
-                </label>
-              </div>
-              <div className={styles.modalActions}>
-                <button type="submit" className={styles.saveBtn}>Save</button>
-                <button type="button" className={styles.cancelBtn} onClick={handleCloseModal}>Cancel</button>
-              </div>
-            </form>
-          </div>
+        {/* ---- Products (built) ---- */}
+        <Link
+          to="/admin/products"
+          style={styles.card}
+          onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
+          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' })}
+        >
+          <div style={styles.icon}>📦</div>
+          <div style={styles.cardTitle}>Products</div>
+          <div style={styles.cardDescription}>Add, edit, and manage product inventory with images.</div>
+          <span style={styles.badge}>Ready</span>
+        </Link>
+
+        {/* ---- Orders (built) ---- */}
+        <Link
+          to="/admin/orders"
+          style={styles.card}
+          onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
+          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' })}
+        >
+          <div style={styles.icon}>🛒</div>
+          <div style={styles.cardTitle}>Orders</div>
+          <div style={styles.cardDescription}>View, update, and fulfill customer orders.</div>
+          <span style={styles.badge}>Ready</span>
+        </Link>
+
+        {/* ---- Users (built) ---- */}
+        <Link
+          to="/admin/users"
+          style={styles.card}
+          onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
+          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' })}
+        >
+          <div style={styles.icon}>👤</div>
+          <div style={styles.cardTitle}>Users</div>
+          <div style={styles.cardDescription}>Manage customers, B2B accounts, and staff.</div>
+          <span style={styles.badge}>Ready</span>
+        </Link>
+
+        {/* ---- B2B Quotes ---- */}
+        <a
+          href="http://127.0.0.1:8000/admin/shop/b2bquote/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.card}
+          onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
+          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' })}
+        >
+          <div style={styles.icon}>📋</div>
+          <div style={styles.cardTitle}>B2B Quotes</div>
+          <div style={styles.cardDescription}>Review and respond to wholesale quote requests.</div>
+          <span style={{ ...styles.badge, background: '#e2e8f0', color: '#475569' }}>Via Django Admin</span>
+          <div style={styles.externalLink}>Opens in new tab →</div>
+        </a>
+
+        {/* ---- Reviews ---- */}
+        <a
+          href="http://127.0.0.1:8000/admin/shop/review/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.card}
+          onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
+          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' })}
+        >
+          <div style={styles.icon}>⭐</div>
+          <div style={styles.cardTitle}>Reviews</div>
+          <div style={styles.cardDescription}>Moderate product reviews and ratings.</div>
+          <span style={{ ...styles.badge, background: '#e2e8f0', color: '#475569' }}>Via Django Admin</span>
+          <div style={styles.externalLink}>Opens in new tab →</div>
+        </a>
+
+        {/* ---- Discounts ---- */}
+        <a
+          href="http://127.0.0.1:8000/admin/shop/bulkorderdiscount/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.card}
+          onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.cardHover)}
+          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' })}
+        >
+          <div style={styles.icon}>🏷️</div>
+          <div style={styles.cardTitle}>Discounts</div>
+          <div style={styles.cardDescription}>Create and manage bulk order discounts.</div>
+          <span style={{ ...styles.badge, background: '#e2e8f0', color: '#475569' }}>Via Django Admin</span>
+          <div style={styles.externalLink}>Opens in new tab →</div>
+        </a>
+
+        {/* ---- Reports (placeholder) ---- */}
+        <div
+          style={{ ...styles.card, cursor: 'default' }}
+          onMouseEnter={(e) => Object.assign(e.currentTarget.style, { ...styles.cardHover, cursor: 'default' })}
+          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', cursor: 'default' })}
+        >
+          <div style={styles.icon}>📊</div>
+          <div style={styles.cardTitle}>Reports</div>
+          <div style={styles.cardDescription}>Sales, revenue, and analytics dashboard.</div>
+          <span style={{ ...styles.badge, background: '#e2e8f0', color: '#475569' }}>Coming Soon</span>
         </div>
-      )}
+      </div>
     </div>
   );
 };
-
-export default AdminDashboard;

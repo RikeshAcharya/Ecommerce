@@ -1,6 +1,7 @@
 """
 Django settings for backend project.
 """
+import os
 import django.template.context
 from django.template.context import BaseContext
 from pathlib import Path
@@ -20,17 +21,20 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
-# Cloudinary configuration
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': config('CLOUDINARY_API_KEY'),
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
+    'UPLOAD_PRESET': os.environ.get('CLOUDINARY_UPLOAD_PRESET', 'my_ecommerce_preset'),
 }
+print("🔍 Upload preset:", CLOUDINARY_STORAGE.get('UPLOAD_PRESET'))
 cloudinary.config(
     cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
     api_key=CLOUDINARY_STORAGE['API_KEY'],
     api_secret=CLOUDINARY_STORAGE['API_SECRET'],
 )
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # =================== APPLICATION DEFINITION ===================
@@ -55,7 +59,11 @@ INSTALLED_APPS = [
 
 # Custom user model
 AUTH_USER_MODEL = 'ecommerceAPP.CustomUser'
-
+# backend/settings.py
+AUTHENTICATION_BACKENDS = [
+    'ecommerceAPP.backends.EmailOrUsernameBackend',  # your custom backend
+    'django.contrib.auth.backends.ModelBackend',     # fallback
+]
 # Cloudinary storage for media files
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 

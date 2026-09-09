@@ -10,6 +10,11 @@ from django.utils import timezone
 from decimal import Decimal
 import uuid
 
+# ─── NEW: REST Framework imports ───
+from rest_framework import viewsets, permissions
+from rest_framework.permissions import IsAdminUser
+from .serializers import ProductCategorySerializer   # <-- import your serializer
+
 from . import models
 from .models import UserType, CustomUser, Product, Cart, CartItem, Order, OrderItem, Review, Wishlist, B2BQuote
 
@@ -344,3 +349,25 @@ def delete_address(request, address_id):
     address.delete()
     messages.success(request, "Address deleted.")
     return redirect('address_list')
+
+
+# ──────────────────────────────────────────────────────────────
+# ─── NEW: REST API ViewSet for ProductCategory ─────────────
+# ──────────────────────────────────────────────────────────────
+'''
+class ProductCategoryViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for product categories.
+    - Only admin users can create, update, or delete.
+    - Any authenticated user can list and retrieve.
+    """
+    queryset = models.ProductCategory.objects.all()
+    serializer_class = ProductCategorySerializer
+    permission_classes = [IsAdminUser]   # staff only for write operations
+
+    # Optional: if you want to allow read-only for non‑staff, you can override:
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [permissions.AllowAny()]  # or [permissions.IsAuthenticated()]
+        return [IsAdminUser()]
+        '''

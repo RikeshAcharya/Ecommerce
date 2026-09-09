@@ -1,0 +1,475 @@
+/* ─── Container ─── */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+/* ─── Gallery ─── */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mainImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f8fafc;
+  cursor: zoom-in;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainImageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.mainImageWrapper:hover img {
+  transform: scale(1.05);
+}
+
+.thumbnailList {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+.thumbnailList::-webkit-scrollbar {
+  height: 4px;
+}
+.thumbnailList::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.thumbnail.active {
+  border-color: #2563eb;
+}
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ─── Product Info ─── */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.name {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #0f172a;
+}
+.brand {
+  font-size: 1rem;
+  color: #475569;
+  margin: -0.5rem 0 0.25rem 0;
+}
+.sku {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+/* ─── Summary Row (price + rating) ─── */
+.summaryRow {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+.reviewCount {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+/* ─── Stock ─── */
+.stockInfo {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.inStock {
+  color: #16a34a;
+}
+.lowStock {
+  color: #dc2626;
+}
+
+/* ─── Quantity Selector ─── */
+.quantitySelector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.quantitySelector button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.quantitySelector button:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+.quantitySelector button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.quantitySelector input {
+  width: 60px;
+  height: 36px;
+  text-align: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  outline: none;
+}
+.quantitySelector input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.quantitySelector input:disabled {
+  background: #f1f5f9;
+}
+
+/* ─── Stock Warning ─── */
+.stockWarning {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-top: -0.25rem;
+}
+
+/* ─── Variants ─── */
+.variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.variants button {
+  padding: 0.3rem 1rem;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.variants button.selected {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+.variants button:hover:not(.selected) {
+  background: #f1f5f9;
+}
+
+/* ─── Cart Actions ─── */
+.cartActions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+}
+
+.addToCart {
+  padding: 0.7rem 2.5rem;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex: 1;
+  min-width: 150px;
+}
+.addToCart:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+.addToCart:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.deleteBtn {
+  padding: 0.5rem 1.25rem;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.deleteBtn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+.deleteBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── B2B Quote ─── */
+.actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.requestQuote {
+  padding: 0.7rem 2rem;
+  background: transparent;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.requestQuote:hover:not(:disabled) {
+  background: #eff6ff;
+}
+.requestQuote:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Error message ─── */
+.errorMessage {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* ─── Description ─── */
+.description {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.25rem;
+}
+.description h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+.description p {
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* ─── Reviews ─── */
+.reviews {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.25rem;
+}
+.reviews h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+.ratingSummary {
+  font-size: 1rem;
+  color: #475569;
+}
+
+/* ─── Lightbox ─── */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: zoom-out;
+}
+.lightboxContent {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightboxContent img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+  .mainImageWrapper {
+    height: 350px;
+  }
+  .name {
+    font-size: 1.5rem;
+  }
+  .price {
+    font-size: 1.5rem;
+  }
+  .thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainImageWrapper {
+    height: 280px;
+  }
+  .thumbnail {
+    width: 50px;
+    height: 50px;
+  }
+  .cartActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .addToCart {
+    min-width: auto;
+  }
+  .deleteBtn {
+    text-align: center;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .requestQuote {
+    width: 100%;
+  }
+}
+
+.cartActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+}
+
+.addToCart {
+  padding: 0.7rem 2rem;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex: 1;
+  min-width: 120px;
+}
+.addToCart:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+.addToCart:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buyNow {
+  padding: 0.7rem 2rem;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex: 1;
+  min-width: 120px;
+}
+.buyNow:hover:not(:disabled) {
+  background: #15803d;
+}
+.buyNow:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.deleteBtn {
+  padding: 0.5rem 1.25rem;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 0.25rem;
+  align-self: flex-start;
+}
+.deleteBtn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.noImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #94a3b8;
+}
+

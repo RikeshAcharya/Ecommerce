@@ -1,0 +1,291 @@
+/* ─── Container ─── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ─── Hero Section ─── */
+.hero {
+  text-align: center;
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 16px;
+  margin-bottom: 2.5rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #475569;
+}
+
+/* ─── Category Section ─── */
+.categorySection {
+  margin: 2.5rem 0;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+/* ─── Category Grid ─── */
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.categoryCard {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  text-decoration: none;
+  color: #0f172a;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+.categoryCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.categoryImage {
+  width: 100%;
+  height: 120px;          /* fixed height for consistency */
+  object-fit: cover;      /* crop to fit */
+  border-radius: 8px;
+  background: #f1f5f9;
+}
+
+.categoryPlaceholder {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border-radius: 8px;
+  color: #94a3b8;
+  gap: 0.25rem;
+}
+
+.categoryPlaceholderIcon {
+  font-size: 2rem;
+}
+
+.categoryPlaceholderText {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.categoryInfo {
+  margin-top: 0.5rem;
+}
+
+.categoryName {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.categoryCount {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.1rem;
+}
+
+/* ─── Product Section ─── */
+.productSection {
+  margin-top: 2.5rem;
+}
+
+/* ─── Product Grid ─── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ─── Product Card ─── */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  color: #0f172a;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #f1f5f9;
+}
+
+.placeholderImage {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.cardBody {
+  padding: 1rem;
+}
+
+.name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.category {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.discountBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #dc2626;
+  color: #fff;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  z-index: 1;
+}
+
+/* ─── States ─── */
+.loading,
+.error {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+}
+
+.error {
+  color: #dc2626;
+}
+
+.empty {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  .hero p {
+    font-size: 1rem;
+  }
+  .categoryGrid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+  .categoryImage {
+    height: 100px;
+  }
+  .categoryPlaceholder {
+    height: 100px;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  .image {
+    height: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+  .hero {
+    padding: 2rem 0;
+  }
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+  .categoryGrid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+  }
+  .categoryImage {
+    height: 80px;
+  }
+  .categoryPlaceholder {
+    height: 80px;
+  }
+  .categoryName {
+    font-size: 0.85rem;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+  .cardBody {
+    padding: 0.75rem;
+  }
+  .name {
+    font-size: 0.9rem;
+  }
+  .image {
+    height: 120px;
+  }
+  .price {
+    font-size: 0.95rem;
+  }
+}
+/* ─── Rating Row ─── */
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.15rem;
+}
+
+.ratingStars {
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.ratingCount {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
